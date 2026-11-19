@@ -80,23 +80,35 @@ def in_range(item: dict, start: str, end: str) -> bool:
 def upload(local: Path, target_dir: str, year: str) -> None:
     cli = shutil.which("databricks")
     if cli is None:
-        sys.exit("Databricks CLI não encontrado. Instale: https://docs.databricks.com/dev-tools/cli/install")
+        sys.exit(
+            "Databricks CLI não encontrado. Instale: https://docs.databricks.com/dev-tools/cli/install"
+        )
     destination = f"dbfs:{target_dir.rstrip('/')}/{year}/{local.name}"
     subprocess.run([cli, "fs", "cp", str(local), destination, "--overwrite"], check=True)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawTextHelpFormatter
+    )
     parser.add_argument("--start", default="2025-01", help="Mês inicial AAAA-MM (padrão 2025-01)")
     parser.add_argument("--end", default="2025-12", help="Mês final AAAA-MM (padrão 2025-12)")
-    parser.add_argument("--groups", nargs="+", default=["gasolina-etanol", "diesel-gnv"], choices=GROUPS)
+    parser.add_argument(
+        "--groups", nargs="+", default=["gasolina-etanol", "diesel-gnv"], choices=GROUPS
+    )
     parser.add_argument("--out", default="data/raw", help="Pasta local de saída")
-    parser.add_argument("--upload-to", help="Caminho do Volume, ex.: /Volumes/workspace/anp_combustiveis/raw/anp")
+    parser.add_argument(
+        "--upload-to", help="Caminho do Volume, ex.: /Volumes/workspace/anp_combustiveis/raw/anp"
+    )
     parser.add_argument("--force", action="store_true", help="Baixa de novo arquivos já existentes")
     parser.add_argument("--dry-run", action="store_true", help="Só lista os arquivos")
     args = parser.parse_args()
 
-    items = [i for i in discover_links() if i["group"] in args.groups and in_range(i, args.start, args.end)]
+    items = [
+        i
+        for i in discover_links()
+        if i["group"] in args.groups and in_range(i, args.start, args.end)
+    ]
     if not items:
         sys.exit("Nenhum arquivo encontrado para o período e os grupos informados.")
     print(f"{len(items)} arquivo(s) no período {args.start} a {args.end}")
