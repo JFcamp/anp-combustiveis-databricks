@@ -5,13 +5,13 @@
 ```mermaid
 flowchart LR
   A[ANP dados abertos<br/>CSV mensais] -->|scripts/download_data.py<br/>na máquina local| B[(Volume<br/>raw/anp)]
-  B --> C[bronze.anp_precos_raw]
-  C --> D[silver.anp_precos]
-  C --> Q[silver.anp_precos_quarentena]
-  D --> G1[gold.preco_medio_mensal_uf_produto]
-  G1 --> G2[gold.variacao_mensal_uf_produto]
-  D --> G3[gold.ranking_municipios_mensal]
-  D --> G4[gold.razao_etanol_gasolina_uf]
+  B --> C[bronze_anp_precos]
+  C --> D[silver_anp_precos]
+  C --> Q[silver_anp_precos_quarentena]
+  D --> G1[gold_preco_medio_mensal_uf_produto]
+  G1 --> G2[gold_variacao_mensal_uf_produto]
+  D --> G3[gold_ranking_municipios_mensal]
+  D --> G4[gold_razao_etanol_gasolina_uf]
   G1 & G2 & G3 & G4 --> H[AI/BI Dashboard]
 ```
 
@@ -34,14 +34,14 @@ Colunas: Regiao - Sigla, Estado - Sigla, Municipio, Revenda, CNPJ da Revenda, No
 Numero Rua, Complemento, Bairro, Cep, Produto, Data da Coleta, Valor de Venda,
 Valor de Compra, Unidade de Medida, Bandeira.
 
-## Módulos (`src/anp_pipeline/`)
+Todas as tabelas ficam no mesmo schema, com prefixo da camada (`bronze_`, `silver_`, `gold_`).`n`n## Módulos (`src/anp_pipeline/`)
 
 | Módulo | Responsabilidade |
 |---|---|
 | `quality.py` | Regras como expressões Spark; `apply_quality_rules(df)` devolve `(válidos, inválidos)`; lista UFs válidas |
 | `bronze.py` | `normalize_column_name`, `read_raw_csv`, `add_ingestion_metadata`, `write_bronze` (replaceWhere por arquivo) |
 | `silver.py` | `clean_and_type`, `deduplicate`, `build_silver`, `merge_silver` (MERGE INTO), `write_quarantine` |
-| `gold.py` | Funções puras que geram cada tabela gold a partir da silver, e `write_gold` |
+| `config.py` | Nomes de tabelas e caminho do Volume a partir de catalog e schema |`n| `gold.py` | Funções puras que geram cada tabela gold a partir da silver, e `write_gold` |
 
 Funções de transformação são puras (DataFrame in → DataFrame out). Efeitos de I/O ficam
 em funções `write_*`/`merge_*` finas, para que os testes locais não precisem de Delta.
