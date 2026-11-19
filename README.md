@@ -245,7 +245,7 @@ _Adicione aqui os prints do dashboard (salve em `docs/img/`)._
 |---|---|
 | Testes unitários (transformações e qualidade) com PySpark local | Executados |
 | Queries SQL em Spark local com dados sintéticos | Executadas |
-| Testes de integração com Delta (idempotência de bronze, silver e quarentena) | Rodam no CI (Linux) |
+| Testes de integração com Delta (idempotência de bronze, silver e quarentena) | Executados no CI (Linux): 40 testes passaram, sem testes pulados |
 | `databricks bundle validate`/`deploy` e execução do job no workspace | A executar por você (passos 3 a 5) |
 | Dashboard AI/BI | A montar por você (passo 6) |
 
