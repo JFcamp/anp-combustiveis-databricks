@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Dados e artefatos locais
+data/
+_tmp/
+spark-warehouse/
+metastore_db/
+derby.log
+*.csv
+!tests/fixtures/*.csv
+
+# Databricks
+.databricks/
+.bundle/
+
+# Segredos
+.env
+.env.*
+*.pem
+*.key
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store

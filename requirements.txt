@@ -1,0 +1,6 @@
+# Dependências para desenvolvimento local e CI.
+# No Databricks serverless, PySpark e Delta já vêm no runtime.
+pyspark>=4.0,<4.1
+pytest>=8.0
+ruff>=0.6
+requests>=2.32
